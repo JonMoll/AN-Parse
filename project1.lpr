@@ -22,6 +22,8 @@ type
 
 procedure TMyApplication.DoRun;
 var objeto : CArbol;
+    a : array of ptr_nodo;
+    i : integer;
 begin
   WriteLn('Parse');
   WriteLn('');
@@ -37,6 +39,24 @@ begin
   objeto.Insertar('5', '*', '6', DERECHA);
   objeto.ImprimirUltimo();
 
+
+  SetLength(a,4);
+  for i:=0 to Length(a) do
+  begin
+         new(a[i]);
+  end;
+  a[0]^.m_val := '1';
+  a[0]^.m_is_op := false;
+  a[1]^.m_val := '+';
+  a[1]^.m_is_op := true;
+  a[2]^.m_val := '2';
+  a[2]^.m_is_op := false;
+  a[3]^.m_val := '*';
+  a[3]^.m_is_op := true;
+  a[4]^.m_val := '3';
+  a[4]^.m_is_op := false;
+
+  objeto.fInsetar(a);
   objeto.Destroy();
 
   ReadLn;

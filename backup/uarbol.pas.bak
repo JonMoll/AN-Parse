@@ -7,13 +7,15 @@ interface
 uses Classes, SysUtils, UNodo;
 
 type
+node_array = array of ptr_nodo;
 
 CArbol = Class
 public
     m_ptr_raiz : ptr_nodo;
-    m_ptr_ultimo : ptr_nodo;
+    m_ptr_ultimo : ptr_nodo;//innecesario
 
     procedure Insertar(a, op, b, id : string);
+    procedure fInsetar(cadena:node_array);
     procedure EliminarUltimo();
     procedure ImprimirUltimo();
 
@@ -51,17 +53,6 @@ begin
 
             ptr_temp := m_ptr_ultimo^.m_ptr_izq;
             ptr_temp^.m_ptr_ant := m_ptr_ultimo;
-
-            ptr_temp^.m_id := IZQUIERDA;
-
-            ptr_temp^.m_a := a;
-            ptr_temp^.m_op := op;
-            ptr_temp^.m_b := b;
-
-            ptr_temp^.m_ptr_izq := nil;
-            ptr_temp^.m_ptr_der := nil;
-
-            m_ptr_ultimo := ptr_temp;
         end;
 
         if (id = DERECHA) then begin
@@ -69,19 +60,41 @@ begin
 
             ptr_temp := m_ptr_ultimo^.m_ptr_der;
             ptr_temp^.m_ptr_ant := m_ptr_ultimo;
-
-            ptr_temp^.m_id := DERECHA;
-
-            ptr_temp^.m_a := a;
-            ptr_temp^.m_op := op;
-            ptr_temp^.m_b := b;
-
-            ptr_temp^.m_ptr_izq := nil;
-            ptr_temp^.m_ptr_der := nil;
-
-            m_ptr_ultimo := ptr_temp;
         end;
+
+        ptr_temp^.m_id := id;
+
+        ptr_temp^.m_a := a;
+        ptr_temp^.m_op := op;
+        ptr_temp^.m_b := b;
+
+        ptr_temp^.m_ptr_izq := nil;
+        ptr_temp^.m_ptr_der := nil;
+
+        m_ptr_ultimo := ptr_temp;
     end;
+end;
+
+procedure CArbol.fInsetar(cadena : node_array);
+var
+  i,particion : integer ;
+  a_left,a_right : node_array;
+
+begin
+    if Length(cadena) = 0 then
+       Exit;
+    for i:=0 to Length(cadena)-1 do
+    begin
+         if(cadena[i]^.m_is_op = true) then
+             particion:=i;
+             WriteLn('operador'+cadena[i]^.m_val);
+             Break;
+    end;
+    a_left := Copy(cadena,0,particion);
+    a_right:= Copy(cadena,particion+1,Length(cadena)-1);
+    fInsetar(a_left);
+    fInsetar(a_right);
+
 end;
 
 procedure CArbol.EliminarUltimo();
