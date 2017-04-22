@@ -8,9 +8,9 @@ uses Classes, SysUtils;
 
 const
 
-RAIZ = 'raiz';
-IZQUIERDA = 'izquierda';
-DERECHA = 'derecha';
+RAIZ = 'Nodo raiz';
+IZQUIERDA = 'Nodo en izquierda';
+DERECHA = 'Nodo en derecha';
 
 type
 
