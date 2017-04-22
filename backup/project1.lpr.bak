@@ -2,51 +2,40 @@ program project1;
 
 {$mode objfpc}{$H+}
 
-uses
-  {$IFDEF UNIX}{$IFDEF UseCThreads}
-  cthreads,
-  {$ENDIF}{$ENDIF}
-  Classes, SysUtils, CustApp, UArbol, UNodo, ULista;
+uses {$IFDEF UNIX}{$IFDEF UseCThreads}
+     cthreads,
+     {$ENDIF}{$ENDIF}
+     Classes, SysUtils, CustApp, UArbol, UNodo, ULista, UParse;
 
 type
 
-  { TMyApplication }
+    { TMyApplication }
 
-  TMyApplication = class(TCustomApplication)
-  protected
-    procedure DoRun; override;
-  public
-  end;
+    TMyApplication = class(TCustomApplication)
+    protected
+        procedure DoRun; override;
+    public
+    end;
 
 { TMyApplication }
 
 procedure TMyApplication.DoRun;
-var objeto : CArbol;
+var objeto : CParse;
 begin
-  WriteLn('Parse');
-  WriteLn('');
+    objeto := CParse.Create();
+    objeto.m_expresion := '1+5/56';
+    objeto.Evaluar();
 
-  objeto := CArbol.Create();
+    objeto.Destroy();
 
-  objeto.Insertar('1', '+', '2', '');
-  objeto.ImprimirUltimo();
-
-  objeto.Insertar('3', '-', '4', IZQUIERDA);
-  objeto.ImprimirUltimo();
-
-  objeto.Insertar('5', '*', '6', DERECHA);
-  objeto.ImprimirUltimo();
-
-  objeto.Destroy();
-
-  ReadLn;
+    ReadLn;
 end;
 
 var Application : TMyApplication;
 begin
-  Application := TMyApplication.Create(nil);
-  Application.Title := 'My Application';
-  Application.Run;
-  Application.Free;
+    Application := TMyApplication.Create(nil);
+    Application.Title := 'My Application';
+    Application.Run;
+    Application.Free;
 end.
 

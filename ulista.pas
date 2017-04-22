@@ -38,6 +38,8 @@ begin
         Tipo := PARENTESIS_ABIERTO
     else if (elemento = ')') then
         Tipo := PARENTESIS_CERRADO
+    else if (elemento = ' ') then
+        Tipo := ESPACIO
     else
         Tipo := NUMERO;
 end;

@@ -83,12 +83,15 @@ begin
         ptr_temp := m_ptr_primero;
         lista := '[ ';
 
-        for i := 0 to m_tamano - 1 do begin
+        for i := 0 to m_tamano - 2 do begin
             lista := lista + ptr_temp^.m_contenido;
             lista := lista + ' ][ ';
 
             ptr_temp := ptr_temp^.m_ptr_sig;
         end;
+
+        lista := lista + ptr_temp^.m_contenido;
+        lista := lista + ' ]';
 
         WriteLn(lista);
     end;

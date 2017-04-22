@@ -5,7 +5,7 @@ program project1;
 uses {$IFDEF UNIX}{$IFDEF UseCThreads}
      cthreads,
      {$ENDIF}{$ENDIF}
-     Classes, SysUtils, CustApp, UArbol, UNodo, ULista;
+     Classes, SysUtils, CustApp, UArbol, UNodo, ULista, UParse;
 
 type
 
@@ -20,17 +20,11 @@ type
 { TMyApplication }
 
 procedure TMyApplication.DoRun;
-var objeto : CLista;
+var objeto : CParse;
 begin
-    objeto := CLista.Create();
-
-    objeto.Insertar('1');
-    objeto.Insertar('+');
-    objeto.Insertar('3');
-    objeto.Insertar('/');
-    objeto.Insertar('5');
-
-    objeto.ImplimirLista();
+    objeto := CParse.Create();
+    objeto.m_expresion := '65+124/623';
+    objeto.Evaluar();
 
     objeto.Destroy();
 
