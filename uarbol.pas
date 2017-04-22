@@ -7,15 +7,13 @@ interface
 uses Classes, SysUtils, UNodo;
 
 type
-node_array = array of ptr_nodo;
 
 CArbol = Class
 public
     m_ptr_raiz : ptr_nodo;
-    m_ptr_ultimo : ptr_nodo;//innecesario
+    m_ptr_ultimo : ptr_nodo;
 
     procedure Insertar(a, op, b, id : string);
-    procedure fInsetar(cadena:node_array);
     procedure EliminarUltimo();
     procedure ImprimirUltimo();
 
@@ -73,28 +71,6 @@ begin
 
         m_ptr_ultimo := ptr_temp;
     end;
-end;
-
-procedure CArbol.fInsetar(cadena : node_array);
-var
-  i,particion : integer ;
-  a_left,a_right : node_array;
-
-begin
-    if Length(cadena) = 0 then
-       Exit;
-    for i:=0 to Length(cadena)-1 do
-    begin
-         if(cadena[i]^.m_is_op) then
-             particion:=i;
-             WriteLn('operador'+cadena[i]^.m_val);
-             Break;
-    end;
-    a_left := Copy(cadena,0,particion);
-    a_right:= Copy(cadena,particion+1,Length(cadena)-1);
-    fInsetar(a_left);
-    fInsetar(a_right);
-
 end;
 
 procedure CArbol.EliminarUltimo();

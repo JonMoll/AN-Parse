@@ -23,17 +23,12 @@ CNodo = record
     m_op : string;
     m_b : string;
 
-    m_val: string; //valor que alberga
-    m_is_op: Boolean;
-
     m_ptr_ant : ptr_nodo;
     m_ptr_izq : ptr_nodo;
     m_ptr_der : ptr_nodo;
-
 end;
 
 implementation
-
 
 end.
 

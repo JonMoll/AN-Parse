@@ -8,35 +8,27 @@ uses Classes, SysUtils;
 
 const
 
-RAIZ = 'Nodo raiz';
-IZQUIERDA = 'Nodo en izquierda';
-DERECHA = 'Nodo en derecha';
+RAIZ = 'raiz';
+IZQUIERDA = 'izquierda';
+DERECHA = 'derecha';
 
 type
 
 ptr_nodo = ^CNodo;
 
-CNodo = Class//lo cambie a clase
+CNodo = record
     m_id : string;
 
     m_a : string;
     m_op : string;
     m_b : string;
 
-    m_val: string; //valor que alberga
-    m_is_op: Boolean;
-
     m_ptr_ant : ptr_nodo;
     m_ptr_izq : ptr_nodo;
     m_ptr_der : ptr_nodo;
-    constructor Create();
 end;
 
 implementation
-constructor CNodo.Create();
-begin
-    m_is_op := false;
-end;
 
 end.
 
