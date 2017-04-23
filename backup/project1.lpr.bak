@@ -23,7 +23,7 @@ procedure TMyApplication.DoRun;
 var objeto : CParse;
 begin
     objeto := CParse.Create();
-    objeto.m_expresion := '2+2-4';
+    objeto.m_expresion := '(1+1)-(2+1)';
 
     WriteLn( objeto.EvaluacionLineal() );
 
