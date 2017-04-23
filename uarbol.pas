@@ -15,7 +15,8 @@ public
     m_ptr_ultimo : ptr_nodo;//innecesario
 
     procedure Insertar(a, op, b, id : string);
-    procedure fInsetar(cadena:node_array);
+    procedure fInsetar(cadena : node_array ; nodo : ptr_nodo) ;
+    function fCadenaToNodes(cadena :string) : node_array;
     procedure EliminarUltimo();
     procedure ImprimirUltimo();
 
@@ -75,7 +76,64 @@ begin
     end;
 end;
 
-procedure CArbol.fInsetar(cadena : node_array);
+function CArbol.fCadenaToNodes(cadena : string) : node_array;//string a vector de nodos
+var
+  Arr: array of Char;
+  nodes: node_array;
+  i: integer;
+begin
+  SetLength(Arr,Length(cadena));
+  SetLength(nodes,Length(cadena));
+  for i := 1 to Length(cadena) do
+      Arr[i - 1] := cadena[i];
+
+  //Ahora tenemos un buen vector con chars
+  //porque los string son medios raros (1-n)
+
+  //aqui coloco todos los posibles operadores
+  for i:=0 to Length(nodes) do
+  begin
+         new(nodes[i]);
+  end;
+  for i := 0 to Length(Arr)-1 do
+  begin
+       if arr[i]='+' then
+       begin
+          nodes[i]^.m_val := Arr[i];
+          nodes[i]^.m_is_op := true;
+       end
+       else if arr[i]='-' then
+       begin
+          nodes[i]^.m_val := Arr[i];
+          nodes[i]^.m_is_op := true;
+       end
+       else if arr[i]='*' then
+       begin
+          nodes[i]^.m_val := Arr[i];
+          nodes[i]^.m_is_op := true;
+       end
+       else if arr[i]='/' then
+       begin
+          nodes[i]^.m_val := Arr[i];
+          nodes[i]^.m_is_op := true;
+       end
+       else if arr[i]='^' then
+       begin
+          nodes[i]^.m_val := Arr[i];
+          nodes[i]^.m_is_op := true;
+       end
+       else
+       begin
+          nodes[i]^.m_val := Arr[i];
+          nodes[i]^.m_is_op := false;
+       end;
+  end;
+
+
+  fCadenaToNodes:=nodes;
+end;
+
+procedure CArbol.fInsetar(cadena : node_array; nodo : ptr_nodo);//insertaa un vector de nodos
 var
   i,particion : integer ;
   a_left,a_right : node_array;
@@ -83,17 +141,33 @@ var
 begin
     if Length(cadena) = 0 then
        Exit;
-    for i:=0 to Length(cadena)-1 do
+
+    if Length(cadena) = 1 then
     begin
+         nodo:=cadena[0];
+         WriteLn('num'+nodo^.m_val);
+         Exit;
+    end;
+
+    for i:=0 to Length(cadena) do
+    begin
+
          if(cadena[i]^.m_is_op) then
+         begin
              particion:=i;
-             WriteLn('operador'+cadena[i]^.m_val);
+             nodo:=cadena[i];
+             WriteLn('operador'+nodo^.m_val);
              Break;
+         end;
     end;
     a_left := Copy(cadena,0,particion);
-    a_right:= Copy(cadena,particion+1,Length(cadena)-1);
-    fInsetar(a_left);
-    fInsetar(a_right);
+    a_right:= Copy(cadena,particion+1,Length(cadena)+1);
+    new(nodo^.m_ptr_izq);
+    new(nodo^.m_ptr_der);
+    fInsetar(a_right,nodo^.m_ptr_der);
+    fInsetar(a_left,nodo^.m_ptr_izq);
+
+
 
 end;
 
