@@ -23,8 +23,9 @@ procedure TMyApplication.DoRun;
 var objeto : CParse;
 begin
     objeto := CParse.Create();
-    objeto.m_expresion := '65+124/623';
-    objeto.Evaluar();
+    objeto.m_expresion := '2+2-1';
+
+    WriteLn( objeto.EvaluacionLineal() );
 
     objeto.Destroy();
 
