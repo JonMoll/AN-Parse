@@ -23,10 +23,10 @@ procedure TMyApplication.DoRun;
 var objeto : CParse;
 begin
     objeto := CParse.Create();
-    objeto.m_expresion := '(1+1)-(2+(2^2))';
+    objeto.m_expresion := '1+2*3';
 
     WriteLn(objeto.m_expresion);
-    WriteLn( objeto.EvaluacionLineal() );
+    WriteLn( objeto.Evaluar() );
 
     objeto.Destroy();
 

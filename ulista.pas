@@ -17,6 +17,7 @@ public
     function Tipo(elemento : string) : integer;
     procedure Insertar(contenido : string);
     procedure ImplimirLista();
+    procedure Eliminar3(ptr_primero : ptr_nodolista; nuevo_contenido : string);
 
     constructor Create();
 end;
@@ -97,6 +98,14 @@ begin
 
         WriteLn(lista);
     end;
+end;
+
+procedure CLista.Eliminar3(ptr_primero : ptr_nodolista; nuevo_contenido : string);
+begin
+    ptr_primero^.m_contenido := nuevo_contenido;
+    ptr_primero^.m_ptr_sig := ptr_primero^.m_ptr_sig^.m_ptr_sig^.m_ptr_sig;
+    ptr_primero^.m_tipo := Tipo(nuevo_contenido);
+    m_tamano := m_tamano - 2;
 end;
 
 end.

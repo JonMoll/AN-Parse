@@ -7,9 +7,10 @@
       <Unit0>
         <Filename Value="project1.lpr"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <TopLine Value="15"/>
-        <CursorPos X="22" Y="22"/>
-        <UsageCount Value="40"/>
+        <CursorPos X="33" Y="26"/>
+        <UsageCount Value="44"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -17,9 +18,9 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="UArbol"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="35"/>
-        <CursorPos X="56" Y="57"/>
-        <UsageCount Value="40"/>
+        <TopLine Value="67"/>
+        <CursorPos X="21" Y="30"/>
+        <UsageCount Value="44"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
@@ -27,9 +28,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="UNodo"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="15"/>
         <CursorPos X="20" Y="18"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="44"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
@@ -37,24 +37,22 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ULista"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="24"/>
-        <CursorPos X="39" Y="94"/>
-        <UsageCount Value="39"/>
+        <CursorPos X="30" Y="98"/>
+        <UsageCount Value="43"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="uparse.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UParse"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="26"/>
-        <CursorPos X="6" Y="38"/>
-        <UsageCount Value="37"/>
+        <TopLine Value="121"/>
+        <CursorPos X="59" Y="148"/>
+        <UsageCount Value="41"/>
         <Loaded Value="True"/>
       </Unit4>
     </Units>
-    <JumpHistory Count="18" HistoryIndex="17">
+    <JumpHistory Count="21" HistoryIndex="20">
       <Position1>
         <Filename Value="project1.lpr"/>
         <Caret Line="8" Column="138"/>
@@ -127,6 +125,18 @@
         <Filename Value="uparse.pas"/>
         <Caret Line="58" Column="21" TopLine="43"/>
       </Position18>
+      <Position19>
+        <Filename Value="uparse.pas"/>
+        <Caret Line="220" Column="20" TopLine="199"/>
+      </Position19>
+      <Position20>
+        <Filename Value="ulista.pas"/>
+        <Caret Line="105" Column="10" TopLine="79"/>
+      </Position20>
+      <Position21>
+        <Filename Value="uparse.pas"/>
+        <Caret Line="225" Column="22" TopLine="204"/>
+      </Position21>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>

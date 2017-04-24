@@ -20,8 +20,10 @@ public
     m_expresion : string;
 
     function StrToLista(expresion : string) : CLista;
+    function ListaToStr(lista : CLista) : string;
     function Operar(nodo : ptr_nodo) : string;
-    function EvaluacionLineal() : string;
+    function EvaluacionLineal(expresion : string) : string;
+    function Evaluar() : string;
 
     constructor Create();
 end;
@@ -74,6 +76,23 @@ begin
     StrToLista := lista;
 end;
 
+function CParse.ListaToStr(lista : CLista) : string;
+var ptr_i : ptr_nodolista;
+    i : integer;
+    expresion : string;
+begin
+    expresion := '';
+    ptr_i := lista.m_ptr_primero;
+
+    for i := 0 to lista.m_tamano - 1 do begin
+        expresion := expresion + ptr_i^.m_contenido;
+
+        ptr_i := ptr_i^.m_ptr_sig;
+    end;
+
+    ListaToStr := expresion;
+end;
+
 function CParse.Operar(nodo : ptr_nodo) : string;
 var a, b : real;
     op : string;
@@ -94,13 +113,13 @@ begin
         Operar := FloatToStr( power(a,b) );
 end;
 
-function CParse.EvaluacionLineal() : string;
+function CParse.EvaluacionLineal(expresion : string) : string;
 var lista : CLista;
     arbol : CArbol;
     ptr_i : ptr_nodolista;
     i, nodoactual_estado : integer;
 begin
-     lista := StrToLista(m_expresion);
+     lista := StrToLista(expresion);
      lista.ImplimirLista();
 
      arbol := CArbol.Create();
@@ -207,6 +226,36 @@ begin
      end;
 
      EvaluacionLineal := arbol.m_ptr_raiz^.m_a;
+end;
+
+function CParse.Evaluar() : string;
+var i : integer;
+    ptr_i : ptr_nodolista;
+    lista : CLista;
+    subexpresion : string;
+begin
+    lista := StrToLista(m_expresion);
+
+    ptr_i := lista.m_ptr_primero;
+    i := 0;
+
+    // RESOLVIENDO LAS PRIORIDADES
+    while (i <= lista.m_tamano - 1) do begin
+        if (ptr_i^.m_contenido = '*') or (ptr_i^.m_contenido = '/') or (ptr_i^.m_contenido = '^') then begin
+            if ( ptr_i^.m_ptr_ant^.m_contenido <> ')' ) and ( ptr_i^.m_ptr_sig^.m_contenido <> '(' ) then begin
+                subexpresion := ptr_i^.m_ptr_ant^.m_contenido + ptr_i^.m_contenido + ptr_i^.m_ptr_sig^.m_contenido;
+                lista.Eliminar3(ptr_i^.m_ptr_ant, EvaluacionLineal(subexpresion));
+
+                i := 0;
+                ptr_i := lista.m_ptr_primero;
+            end;
+        end;
+
+        ptr_i := ptr_i^.m_ptr_sig;
+        i := i + 1;
+    end;
+
+    Evaluar := EvaluacionLineal(ListaToStr(lista));
 end;
 
 end.
