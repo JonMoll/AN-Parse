@@ -20,6 +20,7 @@ public
     m_expresion : string;
 
     function StrToLista(expresion : string) : CLista;
+    function ListaToStr(lista : CLista) : string;
     function Operar(nodo : ptr_nodo) : string;
     function EvaluacionLineal(expresion : string) : string;
     function Evaluar() : string;
@@ -73,6 +74,23 @@ begin
     end;
 
     StrToLista := lista;
+end;
+
+function CParse.ListaToStr(lista : CLista) : string;
+var ptr_i : ptr_nodolista;
+    i : integer;
+    expresion : string;
+begin
+    expresion := '';
+    ptr_i := lista.m_ptr_primero;
+
+    for i := 0 to lista.m_tamano - 1 do begin
+        expresion := expresion + ptr_i^.m_contenido;
+
+        ptr_i := ptr_i^.m_ptr_sig;
+    end;
+
+    ListaToStr := expresion;
 end;
 
 function CParse.Operar(nodo : ptr_nodo) : string;
@@ -221,6 +239,7 @@ begin
     ptr_i := lista.m_ptr_primero;
     i := 0;
 
+    // RESOLVIENDO LAS PRIORIDADES
     while (i <= lista.m_tamano - 1) do begin
         if (ptr_i^.m_contenido = '*') or (ptr_i^.m_contenido = '/') or (ptr_i^.m_contenido = '^') then begin
             if ( ptr_i^.m_ptr_ant^.m_contenido <> ')' ) and ( ptr_i^.m_ptr_sig^.m_contenido <> '(' ) then begin
@@ -236,7 +255,7 @@ begin
         i := i + 1;
     end;
 
-    Evaluar := '0';
+    Evaluar := EvaluacionLineal(ListaToStr(lista));
 end;
 
 end.

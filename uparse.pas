@@ -236,12 +236,31 @@ var i : integer;
 begin
     lista := StrToLista(m_expresion);
 
+    // RESOLVIENDO LAS PRIORIDADES DE POTENCIA
     ptr_i := lista.m_ptr_primero;
     i := 0;
 
-    // RESOLVIENDO LAS PRIORIDADES
     while (i <= lista.m_tamano - 1) do begin
-        if (ptr_i^.m_contenido = '*') or (ptr_i^.m_contenido = '/') or (ptr_i^.m_contenido = '^') then begin
+        if (ptr_i^.m_contenido = '^') then begin
+            if ( ptr_i^.m_ptr_ant^.m_contenido <> ')' ) and ( ptr_i^.m_ptr_sig^.m_contenido <> '(' ) then begin
+                subexpresion := ptr_i^.m_ptr_ant^.m_contenido + ptr_i^.m_contenido + ptr_i^.m_ptr_sig^.m_contenido;
+                lista.Eliminar3(ptr_i^.m_ptr_ant, EvaluacionLineal(subexpresion));
+
+                i := 0;
+                ptr_i := lista.m_ptr_primero;
+            end;
+        end;
+
+        ptr_i := ptr_i^.m_ptr_sig;
+        i := i + 1;
+    end;
+
+    // RESOLVIENDO LAS PRIORIDADES DE MULTIPLICACION Y DIVISION
+    ptr_i := lista.m_ptr_primero;
+    i := 0;
+
+    while (i <= lista.m_tamano - 1) do begin
+        if (ptr_i^.m_contenido = '*') or (ptr_i^.m_contenido = '/') then begin
             if ( ptr_i^.m_ptr_ant^.m_contenido <> ')' ) and ( ptr_i^.m_ptr_sig^.m_contenido <> '(' ) then begin
                 subexpresion := ptr_i^.m_ptr_ant^.m_contenido + ptr_i^.m_contenido + ptr_i^.m_ptr_sig^.m_contenido;
                 lista.Eliminar3(ptr_i^.m_ptr_ant, EvaluacionLineal(subexpresion));
