@@ -25,7 +25,7 @@ var objeto : CParse;
   b: integer;
 begin
     objeto := CParse.Create();
-    objeto.m_expresion := 'y+x+(x+1)^(1+2)';
+    objeto.m_expresion := '2+3*(2+3)';
 
     objeto.RecivirVAriable('y',11);
     objeto.RecivirVAriable('x',12);
@@ -35,16 +35,12 @@ begin
     objeto.RecivirVAriable('x',20);
     objeto.RecivirVAriable('y',22);
     objeto.RecivirVAriable('x',2);
-    a:=0;
-    while (a<Length(objeto.m_MemoriaVar)) do
-    begin
-      WriteLn(objeto.m_MemoriaVar[a]+' = '+ FloatToStr(objeto.m_MemoriaVal[a]));
-      a:=a+1;
+    a := 0;
+
+    while (a<Length(objeto.m_MemoriaVar)) do begin
+      WriteLn(objeto.m_MemoriaVar[a] + ' = ' + FloatToStr(objeto.m_MemoriaVal[a]));
+      a := a + 1;
     end;
-
-
-
-
 
     objeto.Destroy();
 

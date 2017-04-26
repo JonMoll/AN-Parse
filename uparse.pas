@@ -245,8 +245,8 @@ begin
 end;
 
 function CParse.Evaluar() : string;
-var i, i_temp, estado_operacion, parentesis_pendientes : integer;
-    ptr_i, ptr_temp : ptr_nodolista;
+var i, i_temp, estado_operacion, parentesis_pendientes, parentesis_izq, parentesis_der : integer;
+    ptr_i, ptr_j, ptr_temp : ptr_nodolista;
     lista : CLista;
     j: integer;
     encontro: integer;
@@ -350,6 +350,37 @@ begin
 
                 ptr_i := ptr_temp^.m_ptr_sig;
                 i := i_temp + 2;
+            end
+            else if ( ptr_i^.m_ptr_ant^.m_contenido = ')' ) and ( ptr_i^.m_ptr_sig^.m_contenido = '(' ) then begin
+                ptr_temp := ptr_i;
+                i_temp := i;
+
+                parentesis_izq := 1;
+                parentesis_der := 1;
+
+                ptr_i := ptr_i^.m_ptr_ant;
+                ptr_j := ptr_i^.m_ptr_sig^.m_ptr_sig;
+
+                while (parentesis_izq <> 0) or (parentesis_der <> 0) do begin
+                    ptr_i := ptr_i^.m_ptr_ant;
+                    ptr_j := ptr_j^.m_ptr_sig;
+
+                    if (ptr_i^.m_tipo = PARENTESIS_CERRADO) then
+                        parentesis_izq := parentesis_izq + 1
+                    else if (ptr_i^.m_tipo = PARENTESIS_ABIERTO) then
+                        parentesis_izq := parentesis_izq - 1;
+
+                    if (ptr_j^.m_tipo = PARENTESIS_CERRADO) then
+                        parentesis_der := parentesis_der - 1
+                    else if (ptr_j^.m_tipo = PARENTESIS_ABIERTO) then
+                        parentesis_der := parentesis_der + 1;
+                end;
+
+                lista.InsertarSigAnt(ptr_i, ANTERIOR, '(');
+                lista.InsertarSigAnt(ptr_j, SIGUIENTE, ')');
+
+                ptr_i := ptr_temp^.m_ptr_sig;
+                i := i_temp + 2;
             end;
         end;
 
@@ -374,6 +405,107 @@ begin
 
         ptr_i := ptr_i^.m_ptr_sig;
         i := i + 1;
+    end;
+
+    // RESOLVIENDO LAS PRIORIDADES DE MULTIPLICACION Y DIVISION AGREGANDO PARENTESIS
+    ptr_i := lista.m_ptr_primero;
+    i := 0;
+
+    while (i < lista.m_tamano - 1) do begin
+        if (ptr_i^.m_contenido = '*') or (ptr_i^.m_contenido = '/') then begin
+            if ( ptr_i^.m_ptr_ant^.m_contenido <> ')' ) and ( ptr_i^.m_ptr_sig^.m_contenido = '(' ) then begin
+                ptr_temp := ptr_i;
+                i_temp := i;
+
+                estado_operacion := 0;
+                parentesis_pendientes := 0;
+
+                ptr_i := ptr_i^.m_ptr_ant;
+                lista.InsertarSigAnt(ptr_i, ANTERIOR, '(');
+
+                ptr_i := ptr_i^.m_ptr_ant;
+                while (estado_operacion <> 3) or (parentesis_pendientes <> 0) do begin
+                    ptr_i := ptr_i^.m_ptr_sig;
+
+                    if (ptr_i^.m_tipo = PARENTESIS_ABIERTO) then
+                        parentesis_pendientes := parentesis_pendientes + 1
+                    else if (ptr_i^.m_tipo = PARENTESIS_CERRADO) then
+                        parentesis_pendientes := parentesis_pendientes - 1
+                    else begin
+                        if (estado_operacion < 3) then
+                            estado_operacion := estado_operacion + 1;
+                    end;
+                end;
+
+                lista.InsertarSigAnt(ptr_i, SIGUIENTE, ')');
+
+                ptr_i := ptr_temp^.m_ptr_sig;
+                i := i_temp + 2;
+            end
+            else if ( ptr_i^.m_ptr_ant^.m_contenido = ')' ) and ( ptr_i^.m_ptr_sig^.m_contenido <> '(' ) then begin
+                ptr_temp := ptr_i;
+                i_temp := i;
+
+                estado_operacion := 0;
+                parentesis_pendientes := 0;
+
+                ptr_i := ptr_i^.m_ptr_sig;
+                lista.InsertarSigAnt(ptr_i, SIGUIENTE, ')');
+
+                ptr_i := ptr_i^.m_ptr_sig;
+                while (estado_operacion <> 3) or (parentesis_pendientes <> 0) do begin
+                    ptr_i := ptr_i^.m_ptr_ant;
+
+                    if (ptr_i^.m_tipo = PARENTESIS_CERRADO) then
+                        parentesis_pendientes := parentesis_pendientes + 1
+                    else if (ptr_i^.m_tipo = PARENTESIS_ABIERTO) then
+                        parentesis_pendientes := parentesis_pendientes - 1
+                    else begin
+                        if (estado_operacion < 3) then
+                            estado_operacion := estado_operacion + 1;
+                    end;
+                end;
+
+                lista.InsertarSigAnt(ptr_i, ANTERIOR, '(');
+
+                ptr_i := ptr_temp^.m_ptr_sig;
+                i := i_temp + 2;
+            end
+            else if ( ptr_i^.m_ptr_ant^.m_contenido = ')' ) and ( ptr_i^.m_ptr_sig^.m_contenido = '(' ) then begin
+                ptr_temp := ptr_i;
+                i_temp := i;
+
+                parentesis_izq := 1;
+                parentesis_der := 1;
+
+                ptr_i := ptr_i^.m_ptr_ant;
+                ptr_j := ptr_i^.m_ptr_sig^.m_ptr_sig;
+
+                while (parentesis_izq <> 0) or (parentesis_der <> 0) do begin
+                    ptr_i := ptr_i^.m_ptr_ant;
+                    ptr_j := ptr_j^.m_ptr_sig;
+
+                    if (ptr_i^.m_tipo = PARENTESIS_CERRADO) then
+                        parentesis_izq := parentesis_izq + 1
+                    else if (ptr_i^.m_tipo = PARENTESIS_ABIERTO) then
+                        parentesis_izq := parentesis_izq - 1;
+
+                    if (ptr_j^.m_tipo = PARENTESIS_CERRADO) then
+                        parentesis_der := parentesis_der - 1
+                    else if (ptr_j^.m_tipo = PARENTESIS_ABIERTO) then
+                        parentesis_der := parentesis_der + 1;
+                end;
+
+                lista.InsertarSigAnt(ptr_i, ANTERIOR, '(');
+                lista.InsertarSigAnt(ptr_j, SIGUIENTE, ')');
+
+                ptr_i := ptr_temp^.m_ptr_sig;
+                i := i_temp + 2;
+            end;
+        end;
+
+        i := i + 1;
+        ptr_i := ptr_i^.m_ptr_sig;
     end;
 
     // RESOLVIENDO LAS PRIORIDADES DE MULTIPLICACION Y DIVISION
