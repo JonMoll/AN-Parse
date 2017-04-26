@@ -6,6 +6,10 @@ interface
 
 uses Classes, SysUtils, UNodo;
 
+const
+SIGUIENTE = 1;
+ANTERIOR = 2;
+
 type
 
 CLista = Class
@@ -16,6 +20,7 @@ public
 
     function Tipo(elemento : string) : integer;
     procedure Insertar(contenido : string);
+    procedure InsertarSigAnt(ptr : ptr_nodolista; posicion : integer; contenido : string);
     procedure ImplimirLista();
     procedure Eliminar3(ptr_primero : ptr_nodolista; nuevo_contenido : string);
 
@@ -74,6 +79,46 @@ begin
         m_ptr_ultimo^.m_ptr_sig^.m_ptr_sig := nil;
 
         m_ptr_ultimo := m_ptr_ultimo^.m_ptr_sig;
+    end;
+end;
+
+procedure CLista.InsertarSigAnt(ptr : ptr_nodolista; posicion : integer; contenido : string);
+var ptr_nuevo, ptr_temp : ptr_nodolista;
+begin
+    new(ptr_nuevo);
+    ptr_nuevo^.m_id := 0;
+    ptr_nuevo^.m_contenido := contenido;
+    ptr_nuevo^.m_tipo := Tipo(contenido);
+
+    if (posicion = SIGUIENTE) then begin
+        ptr_temp := ptr^.m_ptr_sig;
+        ptr^.m_ptr_sig := ptr_nuevo;
+
+        ptr_nuevo^.m_ptr_ant := ptr;
+        ptr_nuevo^.m_ptr_sig := ptr_temp;
+
+        if (ptr_temp <> nil) then
+            ptr_temp^.m_ptr_ant := ptr_nuevo;
+
+        if (ptr = m_ptr_ultimo) then
+            m_ptr_ultimo := ptr^.m_ptr_sig;
+
+        m_tamano := m_tamano + 1;
+    end
+    else if (posicion = ANTERIOR) then begin
+        ptr_temp := ptr^.m_ptr_ant;
+        ptr^.m_ptr_ant := ptr_nuevo;
+
+        ptr_nuevo^.m_ptr_sig := ptr;
+        ptr_nuevo^.m_ptr_ant := ptr_temp;
+
+        if (ptr_temp <> nil) then
+            ptr_temp^.m_ptr_sig := ptr_nuevo;
+
+        if (ptr = m_ptr_primero) then
+            m_ptr_primero := ptr^.m_ptr_ant;
+
+        m_tamano := m_tamano + 1;
     end;
 end;
 
