@@ -181,12 +181,24 @@ begin
              end;
 
              if (ptr_i^.m_tipo = PARENTESIS_ABIERTO) then begin
-                 arbol.m_ptr_ultimo^.m_a := ptr_i^.m_contenido;
 
-                 arbol.ImprimirUltimo();
-                 arbol.Insertar('', '', '', IZQUIERDA);
+                 if (arbol.m_ptr_raiz = nil) then begin
+                    arbol.Insertar(ptr_i^.m_contenido, '', '', '');
 
-                 arbol.ImprimirUltimo();
+                    arbol.ImprimirUltimo();
+
+                    arbol.Insertar('', '', '', IZQUIERDA);
+
+                    arbol.ImprimirUltimo();
+                 end
+                 else begin
+                    arbol.m_ptr_ultimo^.m_a := ptr_i^.m_contenido;
+
+                    arbol.ImprimirUltimo();
+                    arbol.Insertar('', '', '', IZQUIERDA);
+
+                    arbol.ImprimirUltimo();
+                 end;
              end;
          end
          // --------------------------------------------------
