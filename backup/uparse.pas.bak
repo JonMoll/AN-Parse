@@ -18,12 +18,17 @@ type
 CParse = Class
 public
     m_expresion : string;
+    m_MemoriaVar: array of string;
+    m_MemoriaVal: array of real;
 
     function StrToLista(expresion : string) : CLista;
     function ListaToStr(lista : CLista) : string;
     function Operar(nodo : ptr_nodo) : string;
     function EvaluacionLineal(expresion : string) : string;
     function Evaluar() : string;
+
+    procedure RecivirVAriable(variable: string; valor:real);
+
 
     constructor Create();
 end;
@@ -33,6 +38,8 @@ implementation
 constructor CParse.Create();
 begin
     m_expresion := '';
+    SetLength(m_MemoriaVal,0);
+    SetLength(m_MemoriaVar,0);
 end;
 
 function CParse.StrToLista(expresion : string) : CLista;
@@ -238,11 +245,47 @@ begin
 end;
 
 function CParse.Evaluar() : string;
-var i, i_temp, estado_operacion, parentesis_pendientes, parentesis_izq, parentesis_der : integer;
-    ptr_i, ptr_j, ptr_temp : ptr_nodolista;
+var i, i_temp, estado_operacion, parentesis_pendientes : integer;
+    ptr_i, ptr_temp : ptr_nodolista;
     lista : CLista;
+    j: integer;
+    encontro: integer;
+    new_exp: string;
     subexpresion : string;
+    Arr: array of Char;
 begin
+    //AQUI SE CAMBIA LAS VARIABLES A NUMEROS ANTES DE PASAR A LA EXPRESION
+    WriteLn('Cambio ');
+    if Length(m_MemoriaVal)>0 then
+    begin
+        SetLength(Arr,Length(m_expresion));
+        for i:= 1 to Length(m_expresion) do
+          Arr[i - 1] := m_expresion[i];
+
+        for i := 0 to Length(Arr)-1 do
+        begin
+            encontro:=0;
+            for j := 0 to Length(m_MemoriaVar)-1 do
+            begin
+                WriteLn('Cambio '+FloatToStr(Length(m_MemoriaVar)));
+                if Arr[i]=m_MemoriaVar[j] then
+                  begin
+                    new_exp:=new_exp+FloatToStr(m_MemoriaVal[j]);
+                    encontro:=1;
+                  end;
+            end;
+            if encontro=0 then
+               new_exp:=new_exp+Arr[i];
+        end;
+    end
+    else
+      begin
+          new_exp:=m_expresion;
+      end;
+    WriteLn('Cambio de variable a su valor');
+    WriteLn(new_exp);
+
+    m_expresion:=new_exp;
     lista := StrToLista(m_expresion);
 
     // RESOLVIENDO LAS PRIORIDADES DE POTENCIA AGREGANDO PARENTESIS
@@ -309,37 +352,6 @@ begin
                 ptr_i := ptr_temp^.m_ptr_sig;
                 i := i_temp + 2;
             end;
-            else if ( ptr_i^.m_ptr_ant^.m_contenido = ')' ) and ( ptr_i^.m_ptr_sig^.m_contenido = '(' ) then begin
-                ptr_temp := ptr_i;
-                i_temp := i;
-
-                parentesis_izq := 1;
-                parentesis_der := 1;
-
-                ptr_i := ptr_i^.m_ptr_ant;
-                ptr_j := ptr_i^.m_ptr_sig^.m_ptr_sig;
-
-                while (parentesis_izq <> 0) or (parentesis_der <> 0) do begin
-                    ptr_i := ptr_i^.m_ptr_ant;
-                    ptr_j := ptr_j^.m_ptr_sig;
-
-                    if (ptr_i^.m_tipo = PARENTESIS_CERRADO) then
-                        parentesis_izq := parentesis_izq + 1
-                    else if (ptr_i^.m_tipo = PARENTESIS_ABIERTO) then
-                        parentesis_izq := parentesis_izq - 1;
-
-                    if (ptr_j^.m_tipo = PARENTESIS_CERRADO) then
-                        parentesis_der := parentesis_der - 1
-                    else if (ptr_j^.m_tipo = PARENTESIS_ABIERTO) then
-                        parentesis_der := parentesis_der + 1;
-                end;
-
-                lista.InsertarSigAnt(ptr_i, ANTERIOR, '(');
-                lista.InsertarSigAnt(ptr_j, SIGUIENTE, ')');
-
-                ptr_i := ptr_temp^.m_ptr_sig;
-                i := i_temp + 2;
-            end;
         end;
 
         i := i + 1;
@@ -385,6 +397,30 @@ begin
     end;
 
     Evaluar := EvaluacionLineal(ListaToStr(lista));
+
+end;
+
+procedure CParse.RecivirVAriable(variable: string; valor:real);
+var
+    i: integer;
+    len: integer;
+begin
+    i:=0;
+    len:=Length(m_MemoriaVar);
+    while (i < len) do// ver duplicados
+    begin
+        if (variable=m_MemoriaVar[i]) then
+        begin
+             m_MemoriaVal[i]:=valor;
+             exit;
+        end;
+        i:=i+1;
+    end;
+
+    SetLength(m_MemoriaVar,len+1);
+    SetLength(m_MemoriaVal,len+1);
+    m_MemoriaVar[len]:=variable;
+    m_MemoriaVal[len]:=valor;
 end;
 
 end.

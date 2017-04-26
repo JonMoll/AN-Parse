@@ -21,12 +21,30 @@ type
 
 procedure TMyApplication.DoRun;
 var objeto : CParse;
+  a: integer;
+  b: integer;
 begin
     objeto := CParse.Create();
-    objeto.m_expresion := '1+2+(1+1)^(1+2+(2-2))';
+    objeto.m_expresion := 'y+x+(1+1)^(1+2)';
 
+    objeto.RecivirVAriable('y',11);
+    objeto.RecivirVAriable('x',12);
     WriteLn(objeto.m_expresion);
     WriteLn( objeto.Evaluar() );
+
+    objeto.RecivirVAriable('x',20);
+    objeto.RecivirVAriable('y',22);
+    objeto.RecivirVAriable('x',2);
+    a:=0;
+    while (a<Length(objeto.m_MemoriaVar)) do
+    begin
+      WriteLn(objeto.m_MemoriaVar[a]+' = '+ FloatToStr(objeto.m_MemoriaVal[a]));
+      a:=a+1;
+    end;
+
+
+
+
 
     objeto.Destroy();
 
