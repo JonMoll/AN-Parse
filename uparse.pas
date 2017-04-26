@@ -238,8 +238,8 @@ begin
 end;
 
 function CParse.Evaluar() : string;
-var i, i_temp, estado_operacion, parentesis_pendientes : integer;
-    ptr_i, ptr_temp : ptr_nodolista;
+var i, i_temp, estado_operacion, parentesis_pendientes, parentesis_izq, parentesis_der : integer;
+    ptr_i, ptr_j, ptr_temp : ptr_nodolista;
     lista : CLista;
     subexpresion : string;
 begin
@@ -305,6 +305,37 @@ begin
                 end;
 
                 lista.InsertarSigAnt(ptr_i, ANTERIOR, '(');
+
+                ptr_i := ptr_temp^.m_ptr_sig;
+                i := i_temp + 2;
+            end
+            else if ( ptr_i^.m_ptr_ant^.m_contenido = ')' ) and ( ptr_i^.m_ptr_sig^.m_contenido = '(' ) then begin
+                ptr_temp := ptr_i;
+                i_temp := i;
+
+                parentesis_izq := 1;
+                parentesis_der := 1;
+
+                ptr_i := ptr_i^.m_ptr_ant;
+                ptr_j := ptr_i^.m_ptr_sig^.m_ptr_sig;
+
+                while (parentesis_izq <> 0) or (parentesis_der <> 0) do begin
+                    ptr_i := ptr_i^.m_ptr_ant;
+                    ptr_j := ptr_j^.m_ptr_sig;
+
+                    if (ptr_i^.m_tipo = PARENTESIS_CERRADO) then
+                        parentesis_izq := parentesis_izq + 1
+                    else if (ptr_i^.m_tipo = PARENTESIS_ABIERTO) then
+                        parentesis_izq := parentesis_izq - 1;
+
+                    if (ptr_j^.m_tipo = PARENTESIS_CERRADO) then
+                        parentesis_der := parentesis_der - 1
+                    else if (ptr_j^.m_tipo = PARENTESIS_ABIERTO) then
+                        parentesis_der := parentesis_der + 1;
+                end;
+
+                lista.InsertarSigAnt(ptr_i, ANTERIOR, '(');
+                lista.InsertarSigAnt(ptr_j, SIGUIENTE, ')');
 
                 ptr_i := ptr_temp^.m_ptr_sig;
                 i := i_temp + 2;
