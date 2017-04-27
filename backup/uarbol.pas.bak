@@ -51,17 +51,6 @@ begin
 
             ptr_temp := m_ptr_ultimo^.m_ptr_izq;
             ptr_temp^.m_ptr_ant := m_ptr_ultimo;
-
-            ptr_temp^.m_id := IZQUIERDA;
-
-            ptr_temp^.m_a := a;
-            ptr_temp^.m_op := op;
-            ptr_temp^.m_b := b;
-
-            ptr_temp^.m_ptr_izq := nil;
-            ptr_temp^.m_ptr_der := nil;
-
-            m_ptr_ultimo := ptr_temp;
         end;
 
         if (id = DERECHA) then begin
@@ -69,18 +58,18 @@ begin
 
             ptr_temp := m_ptr_ultimo^.m_ptr_der;
             ptr_temp^.m_ptr_ant := m_ptr_ultimo;
-
-            ptr_temp^.m_id := DERECHA;
-
-            ptr_temp^.m_a := a;
-            ptr_temp^.m_op := op;
-            ptr_temp^.m_b := b;
-
-            ptr_temp^.m_ptr_izq := nil;
-            ptr_temp^.m_ptr_der := nil;
-
-            m_ptr_ultimo := ptr_temp;
         end;
+
+        ptr_temp^.m_id := id;
+
+        ptr_temp^.m_a := a;
+        ptr_temp^.m_op := op;
+        ptr_temp^.m_b := b;
+
+        ptr_temp^.m_ptr_izq := nil;
+        ptr_temp^.m_ptr_der := nil;
+
+        m_ptr_ultimo := ptr_temp;
     end;
 end;
 
