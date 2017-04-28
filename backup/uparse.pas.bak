@@ -415,7 +415,6 @@ begin
     end;
 
     Evaluar := EvaluacionLineal(ListaToStr(lista));
-
 end;
 
 procedure CParse.RecivirVAriable(variable: string; valor:real);

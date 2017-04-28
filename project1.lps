@@ -9,7 +9,7 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <TopLine Value="19"/>
-        <CursorPos X="29" Y="33"/>
+        <CursorPos X="7" Y="28"/>
         <UsageCount Value="63"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -48,8 +48,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="UParse"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="400"/>
-        <CursorPos X="52" Y="417"/>
+        <TopLine Value="381"/>
+        <CursorPos X="67" Y="398"/>
         <UsageCount Value="60"/>
         <Loaded Value="True"/>
       </Unit4>

@@ -386,14 +386,16 @@ begin
                     ptr_i := ptr_i^.m_ptr_ant;
                     ptr_j := ptr_i^.m_ptr_sig^.m_ptr_sig;
 
-                    while (parentesis_izq <> 0) or (parentesis_der <> 0) do begin
+                    while (parentesis_izq <> 0) and (ptr_i <> nil) do begin
                         ptr_i := ptr_i^.m_ptr_ant;
-                        ptr_j := ptr_j^.m_ptr_sig;
 
                         if (ptr_i^.m_tipo = PARENTESIS_CERRADO) then
                             parentesis_izq := parentesis_izq + 1
                         else if (ptr_i^.m_tipo = PARENTESIS_ABIERTO) then
                             parentesis_izq := parentesis_izq - 1;
+                    end;
+                    while (parentesis_der <> 0) and (ptr_j <> nil) do begin
+                        ptr_j := ptr_j^.m_ptr_sig;
 
                         if (ptr_j^.m_tipo = PARENTESIS_CERRADO) then
                             parentesis_der := parentesis_der - 1

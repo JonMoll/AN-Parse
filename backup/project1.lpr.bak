@@ -25,12 +25,12 @@ var objeto : CParse;
   b: integer;
 begin
     objeto := CParse.Create();
-    objeto.m_expresion := '2+3*7^2/4';
+    objeto.m_expresion := '2+3*(5-4/2)';
 
     objeto.RecivirVAriable('y',11);
     objeto.RecivirVAriable('x',12);
     WriteLn(objeto.m_expresion);
-    WriteLn( objeto.Evaluar() );
+    WriteLn( 'RESPUESTA: ' + objeto.Evaluar() );
 
     objeto.RecivirVAriable('x',20);
     objeto.RecivirVAriable('y',22);

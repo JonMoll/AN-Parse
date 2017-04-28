@@ -7,8 +7,10 @@
       <Unit0>
         <Filename Value="project1.lpr"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="19"/>
         <CursorPos X="37" Y="28"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="63"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -18,7 +20,7 @@
         <EditorIndex Value="3"/>
         <TopLine Value="19"/>
         <CursorPos X="37" Y="42"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="63"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
@@ -28,7 +30,7 @@
         <EditorIndex Value="4"/>
         <TopLine Value="16"/>
         <CursorPos X="20" Y="18"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="63"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
@@ -38,18 +40,17 @@
         <EditorIndex Value="2"/>
         <TopLine Value="19"/>
         <CursorPos X="19" Y="19"/>
-        <UsageCount Value="61"/>
+        <UsageCount Value="62"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="uparse.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UParse"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="292"/>
-        <CursorPos X="16" Y="302"/>
-        <UsageCount Value="59"/>
+        <TopLine Value="381"/>
+        <CursorPos X="67" Y="398"/>
+        <UsageCount Value="60"/>
         <Loaded Value="True"/>
       </Unit4>
     </Units>
