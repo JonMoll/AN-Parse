@@ -46,34 +46,47 @@ function CParse.StrToLista(expresion : string) : CLista;
 var lista : CLista;
     i : integer;
     elemento_actual : string;
+    flag_matriz : boolean;
 begin
     expresion := expresion + ' ';
 
     lista := CLista.Create();
     elemento_actual := '';
+    flag_matriz := False;
 
     for i := 1 to expresion.Length do begin
-        if  (expresion[i] = ' ') or
-            (expresion[i] = '+') or
-            (expresion[i] = '-') or
-            (expresion[i] = '*') or
-            (expresion[i] = '/') or
-            (expresion[i] = '^') or
-            (expresion[i] = '(') or
-            (expresion[i] = ')') then begin
+        //if (flag_matriz = False) then begin
+            if  (flag_matriz = False) and
+                (expresion[i] = ' ') or
+                (expresion[i] = '+') or
+                (expresion[i] = '-') or
+                (expresion[i] = '*') or
+                (expresion[i] = '/') or
+                (expresion[i] = '^') or
+                (expresion[i] = '(') or
+                (expresion[i] = ')') then begin
 
-            if (expresion[i] = ' ') then begin
-                if (elemento_actual <> '') then
-                    lista.Insertar(elemento_actual);
+                if (expresion[i] = ' ') then begin
+                    if (elemento_actual <> '') then
+                        lista.Insertar(elemento_actual);
+                end
+                else begin
+                    if (elemento_actual <> '') then
+                        lista.Insertar(elemento_actual);
+
+                    lista.Insertar(expresion[i]);
+
+                    elemento_actual := '';
+                end;
             end
-            else begin
-                if (elemento_actual <> '') then
-                    lista.Insertar(elemento_actual);
-
-                lista.Insertar(expresion[i]);
-
-                elemento_actual := '';
-            end;
+        //end
+        else if (expresion[i] = ']') then begin
+            elemento_actual := elemento_actual + expresion[i];
+            flag_matriz := False;
+        end
+        else if (expresion[i] = '[') or (flag_matriz = True) then begin
+            elemento_actual := elemento_actual + expresion[i];
+            flag_matriz := True;
         end
         else if (lista.Tipo(expresion[i]) = NUMERO) then begin
             elemento_actual := elemento_actual + expresion[i];

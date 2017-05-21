@@ -21,13 +21,14 @@ type
 
 procedure TMyApplication.DoRun;
 var objeto : CParse;
+    lista : CLista;
     x, y : real;
     expresion : string;
 begin
     objeto := CParse.Create();
     //objeto.m_expresion := '2+3*(5-4/2)';
     //objeto.m_expresion := '((2+3^2)^2-(5*2)^2)/((1+2)^2-(3-1)^2)-0.2';
-
+    {
     WriteLn( 'Variables: ');
     WriteLn( '    * Si no va ha usar variables puede escribir cualquier valor en ellas');
     WriteLn( '    x = ');
@@ -52,7 +53,12 @@ begin
         WriteLn( '--------------------------------------------------');
         objeto.Destroy();
         ReadLn();
-    end;
+    end; }
+
+    lista := objeto.StrToLista('[1 1 1;1 1 1]+[1 1 1;1 1 1]');
+    //lista := objeto.StrToLista('2+152');
+    lista.ImplimirLista();
+    lista.Destroy;
 
     objeto.Destroy();
     ReadLn();
