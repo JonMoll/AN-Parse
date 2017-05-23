@@ -21,47 +21,31 @@ type
 
 procedure TMyApplication.DoRun;
 var objeto : CParse;
-    lista : CLista;
-    x, y : real;
-    expresion : string;
+  a: integer;
+  b: integer;
 begin
     objeto := CParse.Create();
     //objeto.m_expresion := '2+3*(5-4/2)';
-    //objeto.m_expresion := '((2+3^2)^2-(5*2)^2)/((1+2)^2-(3-1)^2)-0.2';
-    {
-    WriteLn( 'Variables: ');
-    WriteLn( '    * Si no va ha usar variables puede escribir cualquier valor en ellas');
-    WriteLn( '    x = ');
-    ReadLn(x);
-    WriteLn( '    y = ');
-    ReadLn(y);
+    objeto.m_expresion := '((2+3^2)^2-(5*2)^2)/((1+2)^2-(3-1)^2)-0.2';
 
-    objeto.RecivirVAriable('y', x);
-    objeto.RecivirVAriable('x', y);
+    objeto.RecivirVAriable('y',11);
+    objeto.RecivirVAriable('x',12);
+    WriteLn(objeto.m_expresion);
+    WriteLn( 'RESPUESTA: ' + objeto.Evaluar() );
 
-    WriteLn( 'Expresion: ');
-    ReadLn(expresion);
-    objeto.m_expresion := expresion;
+    objeto.RecivirVAriable('x',20);
+    objeto.RecivirVAriable('y',22);
+    objeto.RecivirVAriable('x',2);
+    a := 0;
 
-    try
-        WriteLn( '--------------------------------------------------');
-        WriteLn( 'RESPUESTA: ' + objeto.Evaluar() );
-        WriteLn( '--------------------------------------------------');
-    except;
-        WriteLn( '--------------------------------------------------');
-        WriteLn( 'HA OCURRIDO UN ERROR');
-        WriteLn( '--------------------------------------------------');
-        objeto.Destroy();
-        ReadLn();
-    end; }
-
-    //lista := objeto.StrToLista('[1 1 1;1 1 1]+[1 1 1;1 1 1]');
-    lista := objeto.StrToLista('2+152');
-    lista.ImplimirLista();
-    lista.Destroy;
+    while (a<Length(objeto.m_MemoriaVar)) do begin
+      WriteLn(objeto.m_MemoriaVar[a] + ' = ' + FloatToStr(objeto.m_MemoriaVal[a]));
+      a := a + 1;
+    end;
 
     objeto.Destroy();
-    ReadLn();
+
+    ReadLn;
 end;
 
 var Application : TMyApplication;

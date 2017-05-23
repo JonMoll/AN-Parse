@@ -104,8 +104,9 @@ begin
             m_ptr_ultimo := ptr^.m_ptr_sig;
 
         m_tamano := m_tamano + 1;
-    end
-    else if (posicion = ANTERIOR) then begin
+    end;
+
+    if (posicion = ANTERIOR) then begin
         ptr_temp := ptr^.m_ptr_ant;
         ptr^.m_ptr_ant := ptr_nuevo;
 

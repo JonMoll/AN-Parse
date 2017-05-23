@@ -38,7 +38,7 @@ end;
 
 function CLista.Tipo(elemento : string) : integer;
 begin
-    if (elemento = '+') or (elemento = '-') or (elemento = '*') or (elemento = '/') or (elemento = '^') then
+    if (elemento = '+') or (elemento = '-') or (elemento = '*') or (elemento = '/') or (elemento = '^') or (elemento = '$')then
         Tipo := OPERADOR
     else if (elemento = '(') then
         Tipo := PARENTESIS_ABIERTO
@@ -46,8 +46,6 @@ begin
         Tipo := PARENTESIS_CERRADO
     else if (elemento = ' ') then
         Tipo := ESPACIO
-    else if (elemento[1] = '[') then
-        Tipo := MATRIZ
     else
         Tipo := NUMERO;
 end;

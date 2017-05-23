@@ -46,51 +46,103 @@ function CParse.StrToLista(expresion : string) : CLista;
 var lista : CLista;
     i : integer;
     elemento_actual : string;
-    flag_matriz : boolean;
 begin
     expresion := expresion + ' ';
 
     lista := CLista.Create();
     elemento_actual := '';
-    flag_matriz := False;
+    i := 1;
+    while i<=Length(expresion) do begin
+        if  (expresion[i] = ' ') or
+            (expresion[i] = '+') or
+            (expresion[i] = '-') or
+            (expresion[i] = '*') or
+            (expresion[i] = '/') or
+            (expresion[i] = '^') or
+            (expresion[i] = '(') or
+            (expresion[i] = ')') then begin
 
-    for i := 1 to expresion.Length do begin
-        //if (flag_matriz = False) then begin
-            if  (flag_matriz = False) and
-                (expresion[i] = ' ') or
-                (expresion[i] = '+') or
-                (expresion[i] = '-') or
-                (expresion[i] = '*') or
-                (expresion[i] = '/') or
-                (expresion[i] = '^') or
-                (expresion[i] = '(') or
-                (expresion[i] = ')') then begin
-
-                if (expresion[i] = ' ') then begin
-                    if (elemento_actual <> '') then
-                        lista.Insertar(elemento_actual);
-                end
-                else begin
-                    if (elemento_actual <> '') then
-                        lista.Insertar(elemento_actual);
-
-                    lista.Insertar(expresion[i]);
-
-                    elemento_actual := '';
-                end;
+            if (expresion[i] = ' ') then begin
+                if (elemento_actual <> '') then
+                    lista.Insertar(elemento_actual);
             end
-        //end
-        else if (expresion[i] = ']') then begin
-            elemento_actual := elemento_actual + expresion[i];
-            flag_matriz := False;
+            else begin
+                if (elemento_actual <> '') then
+                    lista.Insertar(elemento_actual);
+
+                lista.Insertar(expresion[i]);
+
+                elemento_actual := '';
+            end;
         end
-        else if (expresion[i] = '[') or (flag_matriz = True) then begin
-            elemento_actual := elemento_actual + expresion[i];
-            flag_matriz := True;
+        else if ((expresion[i] = 's') and (expresion[i+1] = 'i') and (expresion[i+2] = 'n')) then begin
+
+            lista.Insertar('sin');
+            lista.Insertar('$');//operador para ejecutar funciones
+            i:=i+2;
         end
+        else if ((expresion[i] = 'c') and (expresion[i+1] = 'o') and (expresion[i+2] = 's')) then begin
+            lista.Insertar('cos');
+            lista.Insertar('$');//operador para ejecutar funciones
+            i:=i+2;
+        end
+        else if ((expresion[i] = 't') and (expresion[i+1] = 'a') and (expresion[i+2] = 'n')) then begin
+            lista.Insertar('tan');
+            lista.Insertar('$');//operador para ejecutar funciones
+            i:=i+2;
+        end
+        else if ((expresion[i] = 'c') and (expresion[i+1] = 'o') and (expresion[i+2] = 't') and (expresion[i+3] = 'a') and (expresion[i+4] = 'n')) then begin
+            lista.Insertar('cotan');
+            lista.Insertar('$');//operador para ejecutar funciones
+            i:=i+4;
+        end
+        else if ((expresion[i] = 's') and (expresion[i+1] = 'e') and (expresion[i+2] = 'c')) then begin
+            lista.Insertar('sec');
+            lista.Insertar('$');//operador para ejecutar funciones
+            i:=i+2;
+        end
+        else if ((expresion[i] = 'c') and (expresion[i+1] = 's') and (expresion[i+2] = 'c')) then begin
+            lista.Insertar('csc');
+            lista.Insertar('$');//operador para ejecutar funciones
+            i:=i+2;
+        end
+        else if ((expresion[i] = 's') and (expresion[i+1] = 'i') and (expresion[i+2] = 'n') and (expresion[i+3] = 'h')) then begin
+
+            lista.Insertar('sinh');
+            lista.Insertar('$');//operador para ejecutar funciones
+            i:=i+3;
+        end
+        else if ((expresion[i] = 'c') and (expresion[i+1] = 'o') and (expresion[i+2] = 's') and (expresion[i+3] = 'h')) then begin
+            lista.Insertar('cosh');
+            lista.Insertar('$');//operador para ejecutar funciones
+            i:=i+3;
+        end
+        else if ((expresion[i] = 't') and (expresion[i+1] = 'a') and (expresion[i+2] = 'n') and (expresion[i+3] = 'h')) then begin
+            lista.Insertar('tanh');
+            lista.Insertar('$');//operador para ejecutar funciones
+            i:=i+3;
+        end
+        else if ((expresion[i] = 'e') and (expresion[i+1] = 'x') and (expresion[i+2] = 'p')) then begin
+            lista.Insertar('exp');
+            lista.Insertar('$');//operador para ejecutar funciones
+            i:=i+2;
+        end
+        else if ((expresion[i] = 'l') and (expresion[i+1] = 'o') and (expresion[i+2] = 'g') ) then begin
+            lista.Insertar('cotan');
+            lista.Insertar('$');//operador para ejecutar funciones
+            i:=i+2;
+        end
+        else if ((expresion[i] = 'l') and (expresion[i+1] = 'n')) then begin
+            lista.Insertar('ln');
+            lista.Insertar('$');//operador para ejecutar funciones
+            i:=i+1;
+        end
+
+
         else if (lista.Tipo(expresion[i]) = NUMERO) then begin
             elemento_actual := elemento_actual + expresion[i];
         end;
+        i:=i+1;
     end;
 
     StrToLista := lista;
@@ -117,9 +169,62 @@ function CParse.Operar(nodo : ptr_nodo) : string;
 var a, b : real;
     op : string;
 begin
-    a := StrToFloat(nodo^.m_a);
-    b := StrToFloat(nodo^.m_b);
+    //***primero vemos si es una funcion
     op := nodo^.m_op;
+    b := StrToFloat(nodo^.m_b);
+    if (op = '$') and (nodo^.m_a='sin') then begin
+        Operar:=FloatToStr(sin(b));
+        Exit;
+    end;
+    if (op = '$') and (nodo^.m_a='cos') then begin
+        Operar:=FloatToStr(cos(b));
+        Exit;
+    end;
+    if (op = '$') and (nodo^.m_a='tan') then begin
+        Operar:=FloatToStr(tan(b));
+        Exit;
+    end;
+    if (op = '$') and (nodo^.m_a='cotan') then begin
+        Operar:=FloatToStr(cotan(b));
+        Exit;
+    end;
+    if (op = '$') and (nodo^.m_a='sec') then begin
+        Operar:=FloatToStr(sec(b));
+        Exit;
+    end;
+    if (op = '$') and (nodo^.m_a='csc') then begin
+        Operar:=FloatToStr(csc(b));
+        Exit;
+    end;
+    //----------------hiperbolicos--------------
+    if (op = '$') and (nodo^.m_a='cosh') then begin
+        Operar:=FloatToStr(cosh(b));
+        Exit;
+    end;
+    if (op = '$') and (nodo^.m_a='sinh') then begin
+        Operar:=FloatToStr(sinh(b));
+        Exit;
+    end;
+    if (op = '$') and (nodo^.m_a='tanh') then begin
+        Operar:=FloatToStr(tanh(b));
+        Exit;
+    end;
+    //----------------otros--------------
+    if (op = '$') and (nodo^.m_a='exp') then begin
+        Operar:=FloatToStr(exp(b));
+        Exit;
+    end;
+    if (op = '$') and (nodo^.m_a='log') then begin
+        Operar:=FloatToStr(log10(b));
+        Exit;
+    end;
+    if (op = '$') and (nodo^.m_a='ln') then begin
+        Operar:=FloatToStr(ln(b));
+        Exit;
+    end;
+
+
+    a := StrToFloat(nodo^.m_a);
 
     if (op = '+') then
         Operar := FloatToStr(a + b)
@@ -140,6 +245,8 @@ var lista : CLista;
     i, nodoactual_estado : integer;
 begin
      lista := StrToLista(expresion);
+
+     WriteLn('*****Ver lista****');
      lista.ImplimirLista();
 
      arbol := CArbol.Create();
@@ -213,9 +320,12 @@ begin
                     arbol.ImprimirUltimo();
                  end;
              end;
+
+
          end
          // --------------------------------------------------
          else if (nodoactual_estado = ESTADO_A) then begin
+
              if (ptr_i^.m_tipo = OPERADOR) then begin
                  arbol.m_ptr_ultimo^.m_op := ptr_i^.m_contenido;
 
@@ -233,7 +343,6 @@ begin
 
                  nodoactual_estado := ESTADO_A_OP_B;
              end;
-
              if (ptr_i^.m_tipo = PARENTESIS_ABIERTO) then begin
                  arbol.m_ptr_ultimo^.m_b := '(';
 
@@ -248,7 +357,11 @@ begin
          end;
          // --------------------------------------------------
          if (nodoactual_estado = ESTADO_A_OP_B) then begin
+
              arbol.m_ptr_ultimo^.m_a := Operar(arbol.m_ptr_ultimo);
+
+             WriteLn(arbol.m_ptr_ultimo^.m_a);
+
              arbol.m_ptr_ultimo^.m_op := '';
              arbol.m_ptr_ultimo^.m_b := '';
 
@@ -307,18 +420,21 @@ begin
     WriteLn(new_exp);
 
     m_expresion:=new_exp;
+    WriteLn('Lissta antes del parentesis');
     lista := StrToLista(m_expresion);
 
+
     // RESOLVIENDO LAS PRIORIDADES DE POTENCIA AGREGANDO PARENTESIS
-    for k := 0 to 4 do begin
+    for k := 0 to 5 do begin
         ptr_i := lista.m_ptr_primero;
         i := 0;
+        if (k = 0) then operador_actual := '$';
+        if (k = 1) then operador_actual := '^';
+        if (k = 2) then operador_actual := '/';
+        if (k = 3) then operador_actual := '*';
+        if (k = 4) then operador_actual := '-';
+        if (k = 5) then operador_actual := '+';
 
-        if (k = 0) then operador_actual := '^';
-        if (k = 1) then operador_actual := '/';
-        if (k = 2) then operador_actual := '*';
-        if (k = 3) then operador_actual := '-';
-        if (k = 4) then operador_actual := '+';
 
         while (i < lista.m_tamano - 1) do begin
             if (ptr_i^.m_contenido = operador_actual) then begin
