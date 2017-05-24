@@ -194,7 +194,7 @@ end;
 
 function CParse.Operar(nodo : ptr_nodo) : string;
 var a, b : real;
-    op : string;
+    op, validacion : string;
     cast : CConversion;
     ope_m : CMatrices;
     m_a, m_b, m_r : matriz;
@@ -206,32 +206,62 @@ begin
         if (nodo^.m_op = '+') then begin
             m_a := cast.StrToMatrix(nodo^.m_a);
             m_b := cast.StrToMatrix(nodo^.m_b);
-            m_r := ope_m.Sumar(m_a, m_b);
 
-            Operar := cast.MatrixToStr(m_r);
+            validacion := ope_m.Verificar_2(m_a, m_b, k_sumar);
+
+            if (validacion[1] = '!') then
+                Operar := validacion
+            else begin
+                m_r := ope_m.Sumar(m_a, m_b);
+                Operar := cast.MatrixToStr(m_r);
+            end;
         end
         else if (nodo^.m_op = '-') then begin
             m_a := cast.StrToMatrix(nodo^.m_a);
             m_b := cast.StrToMatrix(nodo^.m_b);
-            m_r := ope_m.Restar(m_a, m_b);
 
-            Operar := cast.MatrixToStr(m_r);
+            validacion := ope_m.Verificar_2(m_a, m_b, k_restar);
+
+            if (validacion[1] = '!') then
+                Operar := validacion
+            else begin
+                m_r := ope_m.Restar(m_a, m_b);
+                Operar := cast.MatrixToStr(m_r);
+            end;
         end
         else if (nodo^.m_op = '*') then begin
             m_a := cast.StrToMatrix(nodo^.m_a);
             m_b := cast.StrToMatrix(nodo^.m_b);
-            m_r := ope_m.Multiplicar(m_a, m_b);
 
-            Operar := cast.MatrixToStr(m_r);
+            validacion := ope_m.Verificar_2(m_a, m_b, k_multiplicar);
+
+            if (validacion[1] = '!') then
+                Operar := validacion
+            else begin
+                m_r := ope_m.Multiplicar(m_a, m_b);
+                Operar := cast.MatrixToStr(m_r);
+            end;
         end
         else if (nodo^.m_op = '$') and (nodo^.m_a = 'det') then begin
             m_b := cast.StrToMatrix(nodo^.m_b);
-            Operar := FloatToStr(ope_m.Determinante(m_b));
+
+            validacion := ope_m.Verificar_1(m_b, k_determinante);
+
+            if (validacion[1] = '!') then
+                Operar := validacion
+            else
+                Operar := FloatToStr(ope_m.Determinante(m_b));
         end
         else if (nodo^.m_op = '$') and (nodo^.m_a = 'inv') then begin
             m_b := cast.StrToMatrix(nodo^.m_b);
-            m_r := ope_m.Inversa(m_b);
-            Operar := cast.MatrixToStr(m_r);
+
+            validacion := ope_m.Verificar_1(m_b, k_inversa);
+            if (validacion[1] = '!') then
+                Operar := validacion
+            else begin
+                m_r := ope_m.Inversa(m_b);
+                Operar := cast.MatrixToStr(m_r);
+            end;
         end;
 
         ope_m.Destroy();
@@ -313,11 +343,12 @@ var lista : CLista;
     arbol : CArbol;
     ptr_i : ptr_nodolista;
     i, nodoactual_estado : integer;
+    eval : string;
 begin
      lista := StrToLista(expresion);
 
-     WriteLn('*****Ver lista****');
-     lista.ImplimirLista();
+     //WriteLn('*****Ver lista****');
+     //lista.ImplimirLista();
 
      arbol := CArbol.Create();
 
@@ -427,8 +458,14 @@ begin
          end;
          // --------------------------------------------------
          if (nodoactual_estado = ESTADO_A_OP_B) then begin
+             eval := Operar(arbol.m_ptr_ultimo);
 
-             arbol.m_ptr_ultimo^.m_a := Operar(arbol.m_ptr_ultimo);
+             if (eval[1] <> '!') then
+                 arbol.m_ptr_ultimo^.m_a := eval
+             else begin
+                 EvaluacionLineal := eval;
+                 Exit;
+             end;
 
              //WriteLn(arbol.m_ptr_ultimo^.m_a);
 

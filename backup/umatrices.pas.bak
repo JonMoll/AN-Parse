@@ -4,7 +4,7 @@ unit UMatrices;
 
 interface
 
-uses Classes, SysUtils, Math;
+uses Classes, SysUtils, Math, UVectorREAL;
 
 type matriz = array of array of real;
 
@@ -228,7 +228,7 @@ function CMatrices.Inversa(matriz_a : matriz) : matriz;
 var matriz_r : matriz;
     n, i, j, k, columnas : integer;
     diagonal, espejo : real;
-    fila_temporal : CVectorREAL;
+    fila_temporal : CVectorReal;
 begin
     n := Length(matriz_a);
     columnas := 2 * n;

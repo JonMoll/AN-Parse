@@ -56,7 +56,10 @@ begin
 
     i := 1;
     while i<=Length(expresion) do begin
-        if  (flag_matriz = False) and
+        if (flag_matriz = True) and (expresion[i] = '-') then begin
+            elemento_actual := elemento_actual + expresion[i];
+        end
+        else if (flag_matriz = False) and
             (expresion[i] = ' ') or
             (expresion[i] = '+') or
             (expresion[i] = '-') or
@@ -102,63 +105,63 @@ begin
         else if ((expresion[i] = 's') and (expresion[i+1] = 'i') and (expresion[i+2] = 'n')) then begin
 
             lista.Insertar('sin');
-            lista.Insertar('$');//operador para ejecutar funciones
+            lista.Insertar('$');
             i:=i+2;
         end
         else if ((expresion[i] = 'c') and (expresion[i+1] = 'o') and (expresion[i+2] = 's')) then begin
             lista.Insertar('cos');
-            lista.Insertar('$');//operador para ejecutar funciones
+            lista.Insertar('$');
             i:=i+2;
         end
         else if ((expresion[i] = 't') and (expresion[i+1] = 'a') and (expresion[i+2] = 'n')) then begin
             lista.Insertar('tan');
-            lista.Insertar('$');//operador para ejecutar funciones
+            lista.Insertar('$');
             i:=i+2;
         end
         else if ((expresion[i] = 'c') and (expresion[i+1] = 'o') and (expresion[i+2] = 't') and (expresion[i+3] = 'a') and (expresion[i+4] = 'n')) then begin
             lista.Insertar('cotan');
-            lista.Insertar('$');//operador para ejecutar funciones
+            lista.Insertar('$');
             i:=i+4;
         end
         else if ((expresion[i] = 's') and (expresion[i+1] = 'e') and (expresion[i+2] = 'c')) then begin
             lista.Insertar('sec');
-            lista.Insertar('$');//operador para ejecutar funciones
+            lista.Insertar('$');
             i:=i+2;
         end
         else if ((expresion[i] = 'c') and (expresion[i+1] = 's') and (expresion[i+2] = 'c')) then begin
             lista.Insertar('csc');
-            lista.Insertar('$');//operador para ejecutar funciones
+            lista.Insertar('$');
             i:=i+2;
         end
         else if ((expresion[i] = 's') and (expresion[i+1] = 'i') and (expresion[i+2] = 'n') and (expresion[i+3] = 'h')) then begin
 
             lista.Insertar('sinh');
-            lista.Insertar('$');//operador para ejecutar funciones
+            lista.Insertar('$');
             i:=i+3;
         end
         else if ((expresion[i] = 'c') and (expresion[i+1] = 'o') and (expresion[i+2] = 's') and (expresion[i+3] = 'h')) then begin
             lista.Insertar('cosh');
-            lista.Insertar('$');//operador para ejecutar funciones
+            lista.Insertar('$');
             i:=i+3;
         end
         else if ((expresion[i] = 't') and (expresion[i+1] = 'a') and (expresion[i+2] = 'n') and (expresion[i+3] = 'h')) then begin
             lista.Insertar('tanh');
-            lista.Insertar('$');//operador para ejecutar funciones
+            lista.Insertar('$');
             i:=i+3;
         end
         else if ((expresion[i] = 'e') and (expresion[i+1] = 'x') and (expresion[i+2] = 'p')) then begin
             lista.Insertar('exp');
-            lista.Insertar('$');//operador para ejecutar funciones
+            lista.Insertar('$');
             i:=i+2;
         end
         else if ((expresion[i] = 'l') and (expresion[i+1] = 'o') and (expresion[i+2] = 'g') ) then begin
             lista.Insertar('cotan');
-            lista.Insertar('$');//operador para ejecutar funciones
+            lista.Insertar('$');
             i:=i+2;
         end
         else if ((expresion[i] = 'l') and (expresion[i+1] = 'n')) then begin
             lista.Insertar('ln');
-            lista.Insertar('$');//operador para ejecutar funciones
+            lista.Insertar('$');
             i:=i+1;
         end
 
@@ -313,8 +316,8 @@ var lista : CLista;
 begin
      lista := StrToLista(expresion);
 
-     WriteLn('*****Ver lista****');
-     lista.ImplimirLista();
+     //WriteLn('*****Ver lista****');
+     //lista.ImplimirLista();
 
      arbol := CArbol.Create();
 
