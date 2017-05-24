@@ -46,6 +46,8 @@ begin
         Tipo := PARENTESIS_CERRADO
     else if (elemento = ' ') then
         Tipo := ESPACIO
+    else if (elemento[1] = '[') then
+        Tipo := T_MATRIZ
     else
         Tipo := NUMERO;
 end;

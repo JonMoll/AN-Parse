@@ -28,6 +28,7 @@ begin
     //objeto.m_expresion := '2+3*(5-4/2)';
     //objeto.m_expresion := '((2+3^2)^2-(5*2)^2)/((1+2)^2-(3-1)^2)-0.2';
 
+    {
     WriteLn( 'Variables: ');
     WriteLn( '    * Si no va ha usar variables puede escribir cualquier valor en ellas');
     WriteLn( '    x = ');
@@ -37,21 +38,24 @@ begin
 
     objeto.RecivirVAriable('y', x);
     objeto.RecivirVAriable('x', y);
+    }
 
-    WriteLn( 'Expresion: ');
-    ReadLn(expresion);
-    objeto.m_expresion := expresion;
+    expresion := '';
 
-    try
-        WriteLn( '--------------------------------------------------');
-        WriteLn( 'RESPUESTA: ' + objeto.Evaluar() );
-        WriteLn( '--------------------------------------------------');
-    except;
-        WriteLn( '--------------------------------------------------');
-        WriteLn( 'HA OCURRIDO UN ERROR');
-        WriteLn( '--------------------------------------------------');
-        objeto.Destroy();
-        ReadLn();
+    while (expresion <> 'exit') do begin
+
+        WriteLn( 'Expresion: ');
+        ReadLn(expresion);
+        objeto.m_expresion := expresion;
+
+        try
+            WriteLn( 'RESPUESTA: ' + objeto.Evaluar() );
+        except;
+            WriteLn( 'HA OCURRIDO UN ERROR');
+        end;
+
+        WriteLn('');
+
     end;
 
     objeto.Destroy();
