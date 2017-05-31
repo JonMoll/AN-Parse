@@ -6,6 +6,13 @@ interface
 
 uses Classes, SysUtils, Math, UVectorREAL;
 
+const k_sumar = 0;
+      k_restar = 1;
+      k_multiplicar = 2;
+      k_potencia = 3;
+      k_determinante = 4;
+      k_inversa = 5;
+
 type matriz = array of array of real;
 
 CMatrices = class
@@ -20,19 +27,13 @@ CMatrices = class
         function Sumar(matriz_a, matriz_b : matriz) : matriz;
         function Restar(matriz_a, matriz_b : matriz) : matriz;
         function Multiplicar(matriz_a, matriz_b : matriz) : matriz;
+        function MultiplicarEsc(matriz_a : matriz; escalar : real) : matriz;
         function Potencia(matriz_a : matriz; exponente : integer) : matriz;
         function Determinante(matriz_a : matriz) : real;
         function Inversa(matriz_a : matriz) : matriz;
 end;
 
 implementation
-
-const k_sumar = 0;
-      k_restar = 1;
-      k_multiplicar = 2;
-      k_potencia = 3;
-      k_determinante = 4;
-      k_inversa = 5;
 
 function CMatrices.Verificar_2(matriz_a, matriz_b : matriz; operacion : integer) : string;
 var filas_a, filas_b, columnas_a, columnas_b : integer;
@@ -45,16 +46,16 @@ begin
 
     if (operacion = k_sumar) or (operacion = k_restar) then begin
         if (filas_a = filas_b) and (columnas_a = columnas_b) then
-            Verificar_2 := '[o]: Exito.'
+            Verificar_2 := 'o: Exito.'
         else
-            Verificar_2 := '[x]: Error, las matrices no tienen el mismo tamaño.';
+            Verificar_2 := '!: Error, las matrices no tienen el mismo tamaño.';
     end;
 
     if (operacion = k_multiplicar) then begin
         if (columnas_a = filas_b) then
-            Verificar_2 := '[o]: Exito.'
+            Verificar_2 := 'o: Exito.'
         else
-            Verificar_2 := '[x]: Error, la cantidad de columnas de la matriz A y la cantidad de filas de la matriz B no son iguales.';
+            Verificar_2 := '!: Error, la cantidad de columnas de la matriz A y la cantidad de filas de la matriz B no son iguales.';
     end;
 end;
 
@@ -66,23 +67,23 @@ begin
 
     if (operacion = k_determinante) or (operacion = k_potencia) then begin
         if (filas = columnas) then
-            Verificar_1 := '[o]: Exito.'
+            Verificar_1 := 'o: Exito.'
         else
-            Verificar_1 := '[x]: Error, la matriz no es cuadrada.';
+            Verificar_1 := '!: Error, la matriz no es cuadrada.';
     end;
 
     if (operacion = k_inversa) then begin
         if (filas = columnas) then
-            Verificar_1 := '[o]: Exito.'
+            Verificar_1 := 'o: Exito.'
         else begin
-            Verificar_1 := '[x]: Error, la matriz no es cuadrada.';
+            Verificar_1 := '!: Error, la matriz no es cuadrada.';
             Exit;
         end;
 
         if (Determinante(matriz_a) <> 0) then
-            Verificar_1 := '[o]: Exito.'
+            Verificar_1 := 'o: Exito.'
 	    else
-            Verificar_1 := '[x]: Error, el determinante de la matriz es cero.'
+            Verificar_1 := '!: Error, el determinante de la matriz es cero.'
     end;
 end;
 
@@ -142,6 +143,23 @@ begin
     end;
 
     Multiplicar := matriz_r;
+end;
+
+function CMatrices.MultiplicarEsc(matriz_a : matriz; escalar : real) : matriz;
+var matriz_r : matriz;
+    filas, columnas, i, j : integer;
+begin
+    filas := Length(matriz_a);
+    columnas := Length(matriz_a[0]);
+
+    SetLength(matriz_r, filas, columnas);
+
+    for i := 0 to filas - 1 do begin
+        for j := 0 to columnas - 1 do
+            matriz_r[i][j] := matriz_a[i][j] * escalar;
+    end;
+
+    MultiplicarEsc := matriz_r;
 end;
 
 function CMatrices.Potencia(matriz_a : matriz; exponente : integer) : matriz;

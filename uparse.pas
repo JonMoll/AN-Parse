@@ -19,7 +19,7 @@ CParse = Class
 public
     m_expresion : string;
     m_MemoriaVar: array of string;
-    m_MemoriaVal: array of real;
+    m_MemoriaVal: array of string;
 
     function StrToLista(expresion : string) : CLista;
     function ListaToStr(lista : CLista) : string;
@@ -27,7 +27,7 @@ public
     function EvaluacionLineal(expresion : string) : string;
     function Evaluar() : string;
 
-    procedure RecivirVAriable(variable: string; valor:real);
+    procedure RecivirVAriable(variable, valor: string);
 
 
     constructor Create();
@@ -89,6 +89,11 @@ begin
         else if (expresion[i] = '[') or (flag_matriz = True) then begin
             elemento_actual := elemento_actual + expresion[i];
             flag_matriz := True;
+        end
+        else if ((expresion[i] = 't') and (expresion[i+1] = 'r') and (expresion[i+2] = 'a')) then begin
+            lista.Insertar('tra');
+            lista.Insertar('$');
+            i:=i+2;
         end
         else if ((expresion[i] = 'd') and (expresion[i+1] = 'e') and (expresion[i+2] = 't')) then begin
 
@@ -194,6 +199,7 @@ end;
 
 function CParse.Operar(nodo : ptr_nodo) : string;
 var a, b : real;
+    c : integer;
     op, validacion : string;
     cast : CConversion;
     ope_m : CMatrices;
@@ -229,18 +235,47 @@ begin
                 Operar := cast.MatrixToStr(m_r);
             end;
         end
-        else if (nodo^.m_op = '*') then begin
+        else if (nodo^.m_op = '^') then begin
             m_a := cast.StrToMatrix(nodo^.m_a);
-            m_b := cast.StrToMatrix(nodo^.m_b);
+            c := StrToInt(nodo^.m_b);
 
-            validacion := ope_m.Verificar_2(m_a, m_b, k_multiplicar);
+            m_r := ope_m.Potencia(m_a, c);
+                Operar := cast.MatrixToStr(m_r);
+        end
+        else if (nodo^.m_op = '*') then begin
+            if (nodo^.m_a[1] = '[') and (nodo^.m_b[1] = '[') then begin
+                m_a := cast.StrToMatrix(nodo^.m_a);
+                m_b := cast.StrToMatrix(nodo^.m_b);
 
-            if (validacion[1] = '!') then
-                Operar := validacion
-            else begin
-                m_r := ope_m.Multiplicar(m_a, m_b);
+                validacion := ope_m.Verificar_2(m_a, m_b, k_multiplicar);
+
+                if (validacion[1] = '!') then
+                    Operar := validacion
+                else begin
+                    m_r := ope_m.Multiplicar(m_a, m_b);
+                    Operar := cast.MatrixToStr(m_r);
+                end;
+            end
+            else if (nodo^.m_a[1] <> '[') and (nodo^.m_b[1] = '[') then begin
+                m_b := cast.StrToMatrix(nodo^.m_b);
+                a := StrToFloat(nodo^.m_a);
+
+                m_r := ope_m.MultiplicarEsc(m_b, a);
+                Operar := cast.MatrixToStr(m_r);
+            end
+            else if (nodo^.m_a[1] = '[') and (nodo^.m_b[1] <> '[') then begin
+                m_a := cast.StrToMatrix(nodo^.m_a);
+                b := StrToFloat(nodo^.m_b);
+
+                m_r := ope_m.MultiplicarEsc(m_a, b);
                 Operar := cast.MatrixToStr(m_r);
             end;
+        end
+        else if (nodo^.m_op = '$') and (nodo^.m_a = 'tra') then begin
+            m_b := cast.StrToMatrix(nodo^.m_b);
+
+            m_r := ope_m.Transpuesta(m_b);
+            Operar := cast.MatrixToStr(m_r);
         end
         else if (nodo^.m_op = '$') and (nodo^.m_a = 'det') then begin
             m_b := cast.StrToMatrix(nodo^.m_b);
@@ -347,8 +382,8 @@ var lista : CLista;
 begin
      lista := StrToLista(expresion);
 
-     //WriteLn('*****Ver lista****');
-     //lista.ImplimirLista();
+     WriteLn('*****Ver lista****');
+     lista.ImplimirLista();
 
      arbol := CArbol.Create();
 
@@ -357,8 +392,8 @@ begin
      try
      ptr_i := lista.m_ptr_primero;
      for i := 0 to lista.m_tamano - 1 do begin
-         //WriteLn('--------------------------------------------------');
-         //WriteLn('Elemento actual: ' + ptr_i^.m_contenido + '   [ estado: ' + IntToStr(nodoactual_estado) + ' ]');
+         WriteLn('--------------------------------------------------');
+         WriteLn('Elemento actual: ' + ptr_i^.m_contenido + '   [ estado: ' + IntToStr(nodoactual_estado) + ' ]');
 
          if (ptr_i^.m_tipo = PARENTESIS_CERRADO) then begin
              if (arbol.m_ptr_ultimo^.m_id = IZQUIERDA) then begin
@@ -367,7 +402,7 @@ begin
                  arbol.m_ptr_ultimo := arbol.m_ptr_ultimo^.m_ptr_ant;
                  arbol.m_ptr_ultimo^.m_ptr_izq := nil;
 
-                 //arbol.ImprimirUltimo();
+                 arbol.ImprimirUltimo();
 
                  nodoactual_estado := ESTADO_A;
              end
@@ -377,7 +412,7 @@ begin
                  arbol.m_ptr_ultimo := arbol.m_ptr_ultimo^.m_ptr_ant;
                  arbol.m_ptr_ultimo^.m_ptr_der := nil;
 
-                 //arbol.ImprimirUltimo();
+                 arbol.ImprimirUltimo();
 
                  nodoactual_estado := ESTADO_A_OP_B;
              end;
@@ -388,14 +423,14 @@ begin
                  if (arbol.m_ptr_raiz = nil) then begin
                     arbol.Insertar(ptr_i^.m_contenido, '', '', '');
 
-                    //arbol.ImprimirUltimo();
+                    arbol.ImprimirUltimo();
 
                     nodoactual_estado := ESTADO_A;
                  end
                  else begin
                     arbol.m_ptr_ultimo^.m_a := ptr_i^.m_contenido;
 
-                    //arbol.ImprimirUltimo();
+                    arbol.ImprimirUltimo();
 
                     nodoactual_estado := ESTADO_A;
                  end;
@@ -406,19 +441,19 @@ begin
                  if (arbol.m_ptr_raiz = nil) then begin
                     arbol.Insertar(ptr_i^.m_contenido, '', '', '');
 
-                    //arbol.ImprimirUltimo();
+                    arbol.ImprimirUltimo();
 
                     arbol.Insertar('', '', '', IZQUIERDA);
 
-                    //arbol.ImprimirUltimo();
+                    arbol.ImprimirUltimo();
                  end
                  else begin
                     arbol.m_ptr_ultimo^.m_a := ptr_i^.m_contenido;
 
-                    //arbol.ImprimirUltimo();
+                    arbol.ImprimirUltimo();
                     arbol.Insertar('', '', '', IZQUIERDA);
 
-                    //arbol.ImprimirUltimo();
+                    arbol.ImprimirUltimo();
                  end;
              end;
 
@@ -430,7 +465,7 @@ begin
              if (ptr_i^.m_tipo = OPERADOR) then begin
                  arbol.m_ptr_ultimo^.m_op := ptr_i^.m_contenido;
 
-                 //arbol.ImprimirUltimo();
+                 arbol.ImprimirUltimo();
 
                  nodoactual_estado := ESTADO_A_OP;
              end;
@@ -440,18 +475,18 @@ begin
              if (ptr_i^.m_tipo = NUMERO) or (ptr_i^.m_tipo = T_MATRIZ) then begin
                  arbol.m_ptr_ultimo^.m_b := ptr_i^.m_contenido;
 
-                 //arbol.ImprimirUltimo();
+                 arbol.ImprimirUltimo();
 
                  nodoactual_estado := ESTADO_A_OP_B;
              end;
              if (ptr_i^.m_tipo = PARENTESIS_ABIERTO) then begin
                  arbol.m_ptr_ultimo^.m_b := '(';
 
-                 //arbol.ImprimirUltimo();
+                 arbol.ImprimirUltimo();
 
                  arbol.Insertar('', '', '', DERECHA);
 
-                 //arbol.ImprimirUltimo();
+                 arbol.ImprimirUltimo();
 
                  nodoactual_estado := ESTADO_VACIO;
              end;
@@ -467,12 +502,12 @@ begin
                  Exit;
              end;
 
-             //WriteLn(arbol.m_ptr_ultimo^.m_a);
+             WriteLn(arbol.m_ptr_ultimo^.m_a);
 
              arbol.m_ptr_ultimo^.m_op := '';
              arbol.m_ptr_ultimo^.m_b := '';
 
-             //arbol.ImprimirUltimo();
+             arbol.ImprimirUltimo();
 
              nodoactual_estado := ESTADO_A;
          end;
@@ -481,7 +516,7 @@ begin
      end;
 
      except
-        WriteLn('Error');
+        WriteLn('Error en el arbol');
 
         Exit();
      end;
@@ -511,7 +546,7 @@ begin
             begin
                 if Arr[i]=m_MemoriaVar[j] then
                   begin
-                    new_exp:=new_exp+FloatToStr(m_MemoriaVal[j]);
+                    new_exp:=new_exp + m_MemoriaVal[j];
                     encontro:=1;
                   end;
             end;
@@ -655,7 +690,7 @@ begin
     Evaluar := EvaluacionLineal(ListaToStr(lista));
 end;
 
-procedure CParse.RecivirVAriable(variable: string; valor:real);
+procedure CParse.RecivirVAriable(variable, valor : string);
 var
     i: integer;
     len: integer;

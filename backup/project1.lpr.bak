@@ -42,17 +42,22 @@ begin
 
     expresion := '';
 
+    objeto.RecivirVAriable('a', '[0.5 0.5 -1;-1 0.5 0.4;0.3 -1 0.4]');
+    objeto.RecivirVAriable('b', '[-0.5 0.3 0.1;-0.4 0.3 0.1;1 1 1]');
+
     while (expresion <> 'exit') do begin
 
-    WriteLn( 'Expresion: ');
-    ReadLn(expresion);
-    objeto.m_expresion := expresion;
+        WriteLn( 'Expresion: ');
+        ReadLn(expresion);
+        objeto.m_expresion := expresion;
 
-    try
-        WriteLn( 'RESPUESTA: ' + objeto.Evaluar() );
-    except;
-        WriteLn( 'HA OCURRIDO UN ERROR');
-    end;
+        try
+            WriteLn( 'RESPUESTA: ' + objeto.Evaluar() );
+        except;
+            WriteLn( 'HA OCURRIDO UN ERROR');
+        end;
+
+        WriteLn('');
 
     end;
 

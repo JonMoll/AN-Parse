@@ -24,9 +24,11 @@ CMatrices = class
         function Verificar_2(matriz_a, matriz_b : matriz; operacion : integer) : string;
         function Verificar_1(matriz_a : matriz; operacion : integer) : string;
 
+        function Transpuesta(matriz_a : matriz) : matriz;
         function Sumar(matriz_a, matriz_b : matriz) : matriz;
         function Restar(matriz_a, matriz_b : matriz) : matriz;
         function Multiplicar(matriz_a, matriz_b : matriz) : matriz;
+        function MultiplicarEsc(matriz_a : matriz; escalar : real) : matriz;
         function Potencia(matriz_a : matriz; exponente : integer) : matriz;
         function Determinante(matriz_a : matriz) : real;
         function Inversa(matriz_a : matriz) : matriz;
@@ -86,6 +88,23 @@ begin
     end;
 end;
 
+function CMatrices.Transpuesta(matriz_a : matriz) : matriz;
+var matriz_r : matriz;
+    filas, columnas, i, j : integer;
+begin
+    filas := Length(matriz_a[0]);
+    columnas := Length(matriz_a);
+
+    SetLength(matriz_r, filas, columnas);
+
+    for i := 0 to filas - 1 do begin
+        for j := 0 to columnas - 1 do
+            matriz_r[i][j] := matriz_a[j][i];
+    end;
+
+    Transpuesta := matriz_r;
+end;
+
 function CMatrices.Sumar(matriz_a, matriz_b : matriz) : matriz;
 var matriz_r : matriz;
     filas, columnas, i, j : integer;
@@ -142,6 +161,23 @@ begin
     end;
 
     Multiplicar := matriz_r;
+end;
+
+function CMatrices.MultiplicarEsc(matriz_a : matriz; escalar : real) : matriz;
+var matriz_r : matriz;
+    filas, columnas, i, j : integer;
+begin
+    filas := Length(matriz_a);
+    columnas := Length(matriz_a[0]);
+
+    SetLength(matriz_r, filas, columnas);
+
+    for i := 0 to filas - 1 do begin
+        for j := 0 to columnas - 1 do
+            matriz_r[i][j] := matriz_a[i][j] * escalar;
+    end;
+
+    MultiplicarEsc := matriz_r;
 end;
 
 function CMatrices.Potencia(matriz_a : matriz; exponente : integer) : matriz;
