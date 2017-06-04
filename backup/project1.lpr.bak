@@ -42,8 +42,8 @@ begin
 
     expresion := '';
 
-    objeto.RecivirVAriable('a', '[0.5 0.5 -1;-1 0.5 0.4;0.3 -1 0.4]');
-    objeto.RecivirVAriable('b', '[-0.5 0.3 0.1;-0.4 0.3 0.1;1 1 1]');
+    objeto.RecivirVAriable('q', '[0.5 0.5 -1;-1 0.5 0.4;0.3 -1 0.4]');
+    objeto.RecivirVAriable('w', '[-0.5 0.3 0.1;-0.4 0.3 0.1;1 1 1]');
 
     while (expresion <> 'exit') do begin
 
@@ -51,6 +51,8 @@ begin
         ReadLn(expresion);
         objeto.m_expresion := expresion;
 
+        if !objeto.OperadorIgual(objeto.m_expresion)then
+        begin
         try
             WriteLn( 'RESPUESTA: ' + objeto.Evaluar() );
         except;
@@ -58,7 +60,7 @@ begin
         end;
 
         WriteLn('');
-
+        end;
     end;
 
     objeto.Destroy();

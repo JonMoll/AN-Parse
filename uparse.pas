@@ -27,8 +27,9 @@ public
     function EvaluacionLineal(expresion : string) : string;
     function Evaluar() : string;
 
-    procedure RecivirVAriable(variable, valor: string);
 
+    procedure RecivirVAriable(variable, valor: string);
+    function OperadorIgual(express : string): Boolean;
 
     constructor Create();
 end;
@@ -711,6 +712,51 @@ begin
     SetLength(m_MemoriaVal,len+1);
     m_MemoriaVar[len]:=variable;
     m_MemoriaVal[len]:=valor;
+end;
+
+function CParse.OperadorIgual(express : string): Boolean;
+var
+    i: integer;
+    len: integer;
+    variable: string;
+    valornum: string;
+    find: Boolean;
+begin
+    i:=1;
+    find:=False;
+    len:=Length(express);
+    valornum:='';
+    variable:='';
+    while (i <= len) do// ver duplicados
+    begin
+        if (find=False) then
+        begin
+
+            if(express[i]='=') then
+            begin
+                find:=True;
+                i:=i+1;
+            end
+            else
+            begin
+                variable:=variable+express[i];
+            end;
+        end;
+        if (find=True) then
+        begin
+            valornum:=valornum+express[i];
+        end;
+        i:=i+1;
+    end;
+    if(find=False)then
+    begin
+         OperadorIgual:=False;
+         exit;//si no hay igual en la expresion
+    end;
+    WriteLn('Variable asignada');
+    WriteLn('   '+variable +'   =   '+valornum);
+    RecivirVAriable(variable,valornum);
+    OperadorIgual:=True;
 end;
 
 end.

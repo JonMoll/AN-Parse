@@ -51,6 +51,8 @@ begin
         ReadLn(expresion);
         objeto.m_expresion := expresion;
 
+        if not objeto.OperadorIgual(objeto.m_expresion)then
+        begin
         try
             WriteLn( 'RESPUESTA: ' + objeto.Evaluar() );
         except;
@@ -58,7 +60,7 @@ begin
         end;
 
         WriteLn('');
-
+        end;
     end;
 
     objeto.Destroy();
