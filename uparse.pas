@@ -528,7 +528,7 @@ end;
 function CParse.Evaluar() : string;
 var i, i_temp, estado_operacion, parentesis_pendientes, parentesis_izq, parentesis_der, j, encontro, k : integer;
     ptr_i, ptr_j, ptr_temp : ptr_nodolista;
-    subexpresion, operador_actual, new_exp : string;
+    subexpresion, operador_actual, new_exp,new_expp : string;
     Arr : array of Char;
     lista : CLista;
 begin
@@ -559,10 +559,36 @@ begin
       begin
           new_exp:=m_expresion;
       end;
+    encontro:=1;
+    if Length(m_MemoriaVal)>0 then
+    begin
+        SetLength(Arr,Length(new_exp));
+        for i:= 1 to Length(new_exp) do
+          Arr[i - 1] := new_exp[i];
+
+        for i := 0 to Length(Arr)-1 do
+        begin
+            encontro:=0;
+            for j := 0 to Length(m_MemoriaVar)-1 do
+            begin
+                if Arr[i]=m_MemoriaVar[j] then
+                  begin
+                    new_expp:=new_expp + m_MemoriaVal[j];
+                    encontro:=1;
+                  end;
+            end;
+            if encontro=0 then
+               new_expp:=new_expp+Arr[i];
+        end;
+    end
+    else
+      begin
+          new_expp:=new_exp;
+      end;
     //WriteLn('Cambio de variable a su valor');
     //WriteLn(new_exp);
 
-    m_expresion:=new_exp;
+    m_expresion:=new_expp;
     //WriteLn('Lissta antes del parentesis');
     lista := StrToLista(m_expresion);
 
